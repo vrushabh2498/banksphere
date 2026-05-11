@@ -1,0 +1,18 @@
+# Maven
+target/
+
+# Eclipse / STS
+.metadata/
+.project
+.classpath
+.settings/
+
+# Logs
+*.log
+
+# Node
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
