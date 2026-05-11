@@ -1,11 +1,74 @@
-# Maven
-target/
-
-# Eclipse / STS
+# STS / Eclipse
 .metadata/
 .project
 .classpath
 .settings/
+
+# Maven
+target/
+
+# Build folders
+bin/
+
+# Logs
+*.log
+
+# Node
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db# STS / Eclipse
+.metadata/
+.project
+.classpath
+.settings/
+
+# Maven
+target/
+
+# Build folders
+bin/
+
+# Logs
+*.log
+
+# Node
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db# STS / Eclipse
+.metadata/
+.project
+.classpath
+.settings/
+
+# Maven
+target/
+
+# Build folders
+bin/
+
+# Logs
+*.log
+
+# Node
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db# STS / Eclipse
+.metadata/
+.project
+.classpath
+.settings/
+
+# Maven
+target/
+
+# Build folders
+bin/
 
 # Logs
 *.log
