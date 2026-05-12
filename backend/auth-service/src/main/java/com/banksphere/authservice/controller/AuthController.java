@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.banksphere.authservice.dto.LoginRequestDto;
+import com.banksphere.authservice.dto.LoginResponseDto;
 import com.banksphere.authservice.dto.RegisterRequestDto;
 import com.banksphere.authservice.dto.RegisterResponseDto;
 import com.banksphere.authservice.service.impl.AuthService;
@@ -31,6 +34,13 @@ public class AuthController {
                 authService.registerUser(requestDto);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+    
+    
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDto> loginUser(@Valid @RequestBody LoginRequestDto requestDto){
+    	LoginResponseDto response=authService.loginUser(requestDto);
+    	return new ResponseEntity<>(response,HttpStatus.OK);
     }
 	
 

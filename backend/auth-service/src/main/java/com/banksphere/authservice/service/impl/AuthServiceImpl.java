@@ -4,6 +4,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.banksphere.authservice.dto.LoginRequestDto;
+import com.banksphere.authservice.dto.LoginResponseDto;
 import com.banksphere.authservice.dto.RegisterRequestDto;
 import com.banksphere.authservice.dto.RegisterResponseDto;
 import com.banksphere.authservice.entity.UserEntity;
@@ -57,6 +59,29 @@ public class AuthServiceImpl implements AuthService {
 				requestDto.getEmail());
 		
 		return new RegisterResponseDto(savedUser.getId(), "User registered successfully");
+		
+	}
+
+	@Override
+	public LoginResponseDto loginUser(LoginRequestDto requestDto) {
+		logger.info("Login attempt for email: {}",
+				requestDto.getEmail());
+		UserEntity user=userRepository.findByEmail(requestDto.getEmail())
+				.orElseThrow(()->{
+					logger.warn("Login failed. User not found with email: {}",
+							requestDto.getEmail());
+					return new RuntimeException("Invalid email or password");
+				});
+		Boolean passwordMatch=passwordEncoder.matches(requestDto.getPassword(), user.getPassword());
+		
+		if(!passwordMatch) {
+			logger.warn("Login failed. Invalid password for email: {}",
+					requestDto.getEmail());
+			throw new RuntimeException("Invalid email or password");
+		}
+		logger.info("Login successful for email: {}",
+				requestDto.getEmail());
+		return new LoginResponseDto("Login successful");
 		
 	}
 	
