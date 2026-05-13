@@ -5,33 +5,50 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.banksphere.authservice.security.filter.JwtAuthenticationFilter;
+
+import lombok.RequiredArgsConstructor;
+@RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
+	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)
-            throws Exception {
+	@Bean
+	public SecurityFilterChain securityFilterChain(
+	        HttpSecurity http)
+	        throws Exception {
 
-        http
+	    http
 
-                .csrf(AbstractHttpConfigurer::disable)
+	            
+	            .csrf(AbstractHttpConfigurer::disable)
+	            .sessionManagement(session ->
+	                    session.sessionCreationPolicy(
+	                            SessionCreationPolicy.STATELESS
+	                    )
+	            )
+	            .authorizeHttpRequests(auth -> auth
 
-                .formLogin(AbstractHttpConfigurer::disable)
+	                    .requestMatchers(
+	                            "/api/v1/auth/**"
+	                    )
+	                    .permitAll()
 
-                .httpBasic(AbstractHttpConfigurer::disable)
+	                    .anyRequest()
+	                    .authenticated()
+	            )
 
-                .authorizeHttpRequests(auth -> auth
+	            
+	            .addFilterBefore(
+	                    jwtAuthenticationFilter,
+	                    UsernamePasswordAuthenticationFilter.class
+	            );
 
-                        .requestMatchers("/api/v1/auth/**")
-                        .permitAll()
-
-                        .anyRequest()
-                        .permitAll()
-                );
-
-        return http.build();
-    }
+	    return http.build();
+	}
 
 }

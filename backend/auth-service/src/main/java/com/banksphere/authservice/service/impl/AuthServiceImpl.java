@@ -10,16 +10,18 @@ import com.banksphere.authservice.dto.RegisterRequestDto;
 import com.banksphere.authservice.dto.RegisterResponseDto;
 import com.banksphere.authservice.entity.UserEntity;
 import com.banksphere.authservice.repository.UserRepository;
+import com.banksphere.authservice.security.jwt.JwtService;
 
 @Service
 public class AuthServiceImpl implements AuthService {
-	
+	private final JwtService jwtService;
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	
-	public AuthServiceImpl(UserRepository userRepository,PasswordEncoder passwordEncoder) {
+	public AuthServiceImpl(UserRepository userRepository,PasswordEncoder passwordEncoder,JwtService jwtService) {
 	    this.userRepository = userRepository;
 	    this.passwordEncoder=passwordEncoder;
+	    this.jwtService=jwtService;
 	}
 	
 	private static final Logger logger= LoggerFactory.getLogger(AuthServiceImpl.class);
@@ -79,9 +81,17 @@ public class AuthServiceImpl implements AuthService {
 					requestDto.getEmail());
 			throw new RuntimeException("Invalid email or password");
 		}
+		
+		String token = jwtService.generateToken(
+		        user.getEmail(),
+		        user.getRole().name()
+		);
 		logger.info("Login successful for email: {}",
 				requestDto.getEmail());
-		return new LoginResponseDto("Login successful");
+		return new LoginResponseDto(
+		        "Login successful",
+		        token
+		);
 		
 	}
 	
